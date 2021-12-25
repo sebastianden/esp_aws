@@ -79,7 +79,7 @@ Resources:
 
 
           dynamodb = boto3.resource('dynamodb')
-          table = dynamodb.Table('myTable')
+          table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
 
 
           def lambda_handler(event, context):
