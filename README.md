@@ -1,5 +1,11 @@
 # ESP8266 AWS IoT Core
 
+[![AWS](https://img.shields.io/static/v1?label=built%20on&message=AWS&color=green&logo=amazonaws)](https://aws.amazon.com)
+[![Python](https://img.shields.io/static/v1?label=python&message=%3E%3D%203.8&color=blue&logo=python&logoColor=white)]()
+[![CDK](https://img.shields.io/badge/aws--cdk-2.17.0-green)](https://docs.aws.amazon.com/cdk/api/v2/)
+[![Code Size](https://img.shields.io/github/languages/code-size/sebastianden/esp_aws)]()
+[![License](https://img.shields.io/github/license/sebastianden/esp_aws)]()
+
 This guide includes instructions to set up a ESP8266 to stream sensor data to AWS IoT Core, store that data in a DynamoDB table and expose a Rest API to retrieve the data.
 
 ## 1. ESP8266
@@ -27,7 +33,7 @@ This section explains how to set up the IDE and install all necessary dependenci
 
 3. Install the ESP8266 Boards: Go to `Tools` > `Board:(Your current board selection)` > `Boards Manager...`. Search for `esp8266` and install version `2.5.0`.
 
-4. Install the necessary libraries: Go to `Tools` > `Manage Libraries...`. In the Librariy Manager search and install: 
+4. Install the necessary libraries: Go to `Tools` > `Manage Libraries...`. In the Librariy Manager search and install:
     - PubSubClient
     - NTPClient
     - DHT sensor library
@@ -95,7 +101,7 @@ YOUR_THING_NAME
 
 ## 2. AWS Architecture
 
-The resources deployed in the AWS cloud will enable storing and retrieval of the IoT sensor data. An IoT rule inserts all data published to a certain MQTT topic into multiple columns of a DynamoDB table. Via a POST request to a REST ApiGateway a lambda function can be triggered to query the database table and return all data from a specified time interval. 
+The resources deployed in the AWS cloud will enable storing and retrieval of the IoT sensor data. An IoT rule inserts all data published to a certain MQTT topic into multiple columns of a DynamoDB table. Via a POST request to a REST ApiGateway a lambda function can be triggered to query the database table and return all data from a specified time interval.
 
 <div align="center">
 	<img width=700 src="images/architecture.png" alt="architecture">
