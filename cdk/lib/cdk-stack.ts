@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iot from 'aws-cdk-lib/aws-iot';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
-import * as apigateway from 'aws-cdk-lib/aws-apigateway'
+import * as apigw from 'aws-cdk-lib/aws-apigateway'
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class CdkStack extends cdk.Stack {
@@ -80,7 +80,14 @@ export class CdkStack extends cdk.Stack {
       },
     );
 
-    //const queryApiGateway = new apigateway.RestApi(this, 'iot-query-api-gateway', {});
+    const queryApiGateway = new apigw.LambdaRestApi(this, 'IotQueryApiGateway', {
+      handler: queryDynamoDbLambda,
+      restApiName: 'iot-query-api-gateway',
+    });
+
+    const queryApiUrl = new cdk.CfnOutput(this, 'IotQueryApiUrl', {
+      value: queryApiGateway.url
+    });
 
   }
 }

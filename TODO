@@ -1,0 +1,4 @@
+- Checkout behave framework for python lambda
+- Unit test for cdk
+- Integration test -> Send message to IoT core and check if in DynamoDb table
+- Use build pipeline (Code Pipeline) and automate cdk build and testing
