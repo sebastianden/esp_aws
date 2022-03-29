@@ -4,6 +4,7 @@ phases:
   install:
     commands:
       - npm install -g aws-cdk
+      - npm install -g typescript
       - cdk --version
 
   build:
