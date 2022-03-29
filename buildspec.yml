@@ -3,8 +3,8 @@ version: 0.2
 phases:
   install:
     commands:
-      - npm install -g aws-cdk
-      - npm install -g typescript
+      - cd ${CODEBUILD_SRC_DIR}/cdk
+      - npm install
       - cdk --version
 
   build:
