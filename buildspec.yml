@@ -4,7 +4,8 @@ phases:
   install:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
-      - npm install -g
+      - npm install
+      - npm install aws-cdk -g
       - cdk --version
 
   build:
