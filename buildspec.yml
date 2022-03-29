@@ -4,7 +4,8 @@ phases:
   install:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
-      - npm install
+      - npm install -g
+      - cdk --version
 
   build:
     commands:
