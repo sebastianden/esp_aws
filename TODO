@@ -4,3 +4,4 @@
 - Use build pipeline (Code Pipeline) and automate cdk build and testing
 - Typing in lambda
 - make new sensor with battery
+- Export url

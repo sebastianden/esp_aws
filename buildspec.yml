@@ -1,0 +1,10 @@
+phases:
+  install:
+    commands:
+      - npm install -g aws-cdk
+      - cdk --version
+
+  build:
+    commands:
+      - cd ${CODEBUILD_SRC_DIR}/cdk
+      - cdk deploy

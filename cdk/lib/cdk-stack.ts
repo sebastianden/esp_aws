@@ -86,7 +86,8 @@ export class CdkStack extends cdk.Stack {
     });
 
     const queryApiUrl = new cdk.CfnOutput(this, 'IotQueryApiUrl', {
-      value: queryApiGateway.url
+      value: queryApiGateway.url,
+      exportName: "iot-api-url"
     });
 
   }
