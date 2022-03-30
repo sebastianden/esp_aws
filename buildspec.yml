@@ -11,4 +11,4 @@ phases:
   build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
-      - cdk deploy
+      - cdk deploy --all
