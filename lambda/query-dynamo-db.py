@@ -2,13 +2,86 @@ import os
 import json
 import boto3
 from boto3.dynamodb.conditions import Key
+from typing import Dict, List
 
+# TODO: Clean up rearranging logic, maybe just return dict? {timestamps: [...], temperature: [...], humidity: [...]}
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
+measurements = ['temperature', 'humidity']
 
 
-def lambda_handler(event, context):
+def query_measurements(start: str, end: str) -> Dict:
+    """
+    Query DynamoDB for temperature and humidity measurements.
+
+    Parameters
+    ----------
+    start: str
+        Start timestamp
+
+    end: str
+        End timestamp
+
+    Returns
+    -------
+    dict: Results of queries
+    """
+    query_results = {}
+
+    for m in measurements:
+        query_results[m] = table.query(
+            KeyConditionExpression=Key('measurement').eq(m) & Key(
+                'timestamp').between(int(start), int(end))
+        )
+
+    return query_results
+
+
+def format_results(query_results: Dict) -> List:
+    """
+    Arrange the query results into a list of lists. Each sub-list consists of
+    three items: Timestamp, temperature and humidity. Missing values are filled
+    with null values
+
+    TODO: Write unit tests
+
+
+    Parameters
+    ----------
+    query_results: dict
+        Results of queries
+
+    Returns
+    -------
+    list: Formatted results as list of lists
+    """
+    timestamp_t = [int(item['timestamp'])
+                   for item in query_results['temperature']['Items']]
+    temperature = [float(item['value'])
+                   for item in query_results['temperature']['Items']]
+    timestamp_h = [int(item['timestamp'])
+                   for item in query_results['humidity']['Items']]
+    humidity = [float(item['value'])
+                for item in query_results['humidity']['Items']]
+    timestamp = list(set(timestamp_t + timestamp_h))
+
+    data = []
+    for t in sorted(timestamp):
+        if t in timestamp_t:
+            temp = temperature[timestamp_t.index(t)]
+        else:
+            temp = None
+        if t in timestamp_h:
+            hum = humidity[timestamp_h.index(t)]
+        else:
+            hum = None
+        data.append([t, temp, hum])
+
+    return data
+
+
+def lambda_handler(event: Dict, _) -> Dict:
 
     if event["httpMethod"] == "POST":
         req = json.loads(event['body'])
@@ -25,32 +98,8 @@ def lambda_handler(event, context):
             },
         }
 
-    response1 = table.query(
-        KeyConditionExpression=Key('measurement').eq('temperature') & Key(
-            'timestamp').between(int(req['from']), int(req['to']))
-    )
-    response2 = table.query(
-        KeyConditionExpression=Key('measurement').eq('humidity') & Key(
-            'timestamp').between(int(req['from']), int(req['to']))
-    )
-
-    timestamp_t = [int(item['timestamp']) for item in response1['Items']]
-    temperature = [float(item['value']) for item in response1['Items']]
-    timestamp_h = [int(item['timestamp']) for item in response2['Items']]
-    humidity = [float(item['value']) for item in response2['Items']]
-    timestamp = list(set(timestamp_t + timestamp_h))
-
-    data = []
-    for t in sorted(timestamp):
-        if t in timestamp_t:
-            temp = temperature[timestamp_t.index(t)]
-        else:
-            temp = None
-        if t in timestamp_h:
-            hum = humidity[timestamp_h.index(t)]
-        else:
-            hum = None
-        data.append([t, temp, hum])
+    query_results = query_measurements(req['from'], req['to'])
+    data = format_results(query_results)
 
     return {
         'statusCode': 200,
