@@ -3,9 +3,10 @@ version: 0.2
 phases:
   install:
     commands:
+      - pip install --target ./test/lambda/layer/python/lib/python3.8/site-packages requests
       - cd ${CODEBUILD_SRC_DIR}/cdk
-      - npm install
-      - npm install -g aws-cdk
+      - npm ci
+      - npm run build
       - cdk --version
 
   build:

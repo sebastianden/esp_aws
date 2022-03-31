@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iot from 'aws-cdk-lib/aws-iot';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
-import * as apigw from 'aws-cdk-lib/aws-apigateway'
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class CdkStack extends cdk.Stack {
@@ -91,50 +91,17 @@ export class CdkStack extends cdk.Stack {
 
     const queryApiUrl = new cdk.CfnOutput(this, 'IotQueryApiUrl', {
       value: queryApiGateway.url,
-      exportName: "iot-api-url"
-    });
-  }
-}
-
-
-export class TestStack extends cdk.Stack {
-
-  ACCOUNT = '274607345716';
-  REGION = 'eu-central-1';
-  TOPIC = 'esp8266/pub';
-
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const integrationTestLambdaRole = new iam.Role(this, 'IoTIntegrationTestLambdaRole', {
-      roleName: 'iot-integration-test-lambda-role',
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName(
-          'service-role/AWSLambdaBasicExecutionRole',
-        ),
-      ],
-      inlinePolicies: {
-        IoTCorePublish: new iam.PolicyDocument({
-          statements: [
-            new iam.PolicyStatement({
-              resources: [`arn:aws:iot:${this.REGION}:${this.ACCOUNT}:topic/${this.TOPIC}`],
-              actions: ['iot:Publish'],
-            }),
-          ],
-        }),
-      },
+      exportName: 'iot-api-url',
     });
 
-    const integrationTestLambda = new lambda.Function(this, 'IoTIntegrationTestLambda', {
-      runtime: lambda.Runtime.PYTHON_3_8,
-      handler: 'integration_test.lambda_handler',
-      code: lambda.Code.fromAsset('../test/lambda/'),
-      role: integrationTestLambdaRole,
-      functionName: 'iot-qintegration-test-lambda',
-      environment: {
-        'TOPIC': this.TOPIC,
-      },
+    const queryDynamoDbLambdaName = new cdk.CfnOutput(this, 'IotDynamoDbLambdaName', {
+      value: queryDynamoDbLambda.functionName,
+      exportName: 'query-dynamodb-lambda-name',
+    });
+
+    const iotTableArn = new cdk.CfnOutput(this, 'IotTableArn', {
+      value: iotTable.tableArn,
+      exportName: 'iot-table-arn',
     });
   }
 }

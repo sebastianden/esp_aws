@@ -8,7 +8,7 @@ client = boto3.client('iot-data')
 
 start = 0
 end = 100
-expected_response = '{"data": [[10, 20.0, null], [12, 20.0, null]]}'
+expected_response = '{"data": [[10, 20.0, 50.0], [12, 20.0, 50.0]]}'
 
 
 def lambda_handler(event: Dict, _) -> Dict:
@@ -27,7 +27,7 @@ def lambda_handler(event: Dict, _) -> Dict:
     client.publish(
         topic=os.getenv('TOPIC'),
         qos=1,
-        payload=json.dumps({'measurement': 'temperature',
+        payload=json.dumps({'measurement': 'humidity',
                             'value': 50,
                             'timestamp': 10,
                             'uom': '%'})
@@ -50,6 +50,8 @@ def lambda_handler(event: Dict, _) -> Dict:
                           os.getenv('LAMBDA_NAME'), data=json.dumps(payload))
 
         assert r.text == expected_response
+
+        # TODO Clean Up (Delete elements from dynamodb)
 
         return {
             'statusCode': 200,
