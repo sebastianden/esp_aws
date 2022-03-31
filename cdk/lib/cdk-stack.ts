@@ -103,5 +103,10 @@ export class CdkStack extends cdk.Stack {
       value: iotTable.tableArn,
       exportName: 'iot-table-arn',
     });
+
+    const iotTableName = new cdk.CfnOutput(this, 'IotTableName', {
+      value: iotTable.tableName,
+      exportName: 'iot-table-name',
+    });
   }
 }

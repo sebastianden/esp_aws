@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - python3.8 -m pip3 install --target ./test/lambda/layer/python/lib/python3.8/site-packages requests
+      - pip install --target ./test/lambda/layer/python/lib/python3.8/site-packages requests
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - npm ci
       - npm run build

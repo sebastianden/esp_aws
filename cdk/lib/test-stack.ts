@@ -14,6 +14,7 @@ export class TestStack extends cdk.Stack {
     const queryApiUrl = cdk.Fn.importValue('iot-api-url');
     const queryDynamoDbLambdaName = cdk.Fn.importValue('query-dynamodb-lambda-name');
     const iotTableArn = cdk.Fn.importValue('iot-dynamodb-table-arn');
+    const iotTableName = cdk.Fn.importValue('iot-dynamodb-table-name');
 
     const integrationTestLambdaRole = new iam.Role(this, 'IotIntegrationTestLambdaRole', {
       roleName: 'iot-integration-test-lambda-role',
@@ -60,6 +61,7 @@ export class TestStack extends cdk.Stack {
         'TOPIC': this.TOPIC,
         'API_URL': queryApiUrl,
         'LAMBDA_NAME': queryDynamoDbLambdaName,
+        'DYNAMODB_TABLE': iotTableName,
       },
     });
   }

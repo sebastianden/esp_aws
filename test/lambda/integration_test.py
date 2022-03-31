@@ -4,8 +4,10 @@ import os
 import requests
 from typing import Dict
 
-client = boto3.client('iot-data')
-
+iot = boto3.client('iot')
+dynamodb = boto3.client('dynamodb')
+table = dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
+measurements = ['temperature', 'humidity']
 start = 0
 end = 100
 expected_response = '{"data": [[10, 20.0, 50.0], [12, 20.0, 50.0]]}'
@@ -14,7 +16,7 @@ expected_response = '{"data": [[10, 20.0, 50.0], [12, 20.0, 50.0]]}'
 def lambda_handler(event: Dict, _) -> Dict:
 
     # Publish sample message containing temperature data
-    client.publish(
+    iot.publish(
         topic=os.getenv('TOPIC'),
         qos=1,
         payload=json.dumps({'measurement': 'temperature',
@@ -24,7 +26,7 @@ def lambda_handler(event: Dict, _) -> Dict:
     )
 
     # Publish sample message containing temperature data
-    client.publish(
+    iot.publish(
         topic=os.getenv('TOPIC'),
         qos=1,
         payload=json.dumps({'measurement': 'humidity',
@@ -52,6 +54,12 @@ def lambda_handler(event: Dict, _) -> Dict:
         assert r.text == expected_response
 
         # TODO Clean Up (Delete elements from dynamodb)
+        for m in measurements:
+            response = table.delete_item(
+                Key={
+                    'measurement': m,
+                    'timestamp': 10
+                })
 
         return {
             'statusCode': 200,
