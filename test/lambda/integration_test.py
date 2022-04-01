@@ -1,8 +1,13 @@
+from multiprocessing import get_logger
 import boto3
 import json
 import os
 import requests
 from typing import Dict
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 iot = boto3.client('iot')
 dynamodb = boto3.client('dynamodb')
@@ -15,6 +20,7 @@ expected_response = '{"data": [[10, 20.0, 50.0], [12, 20.0, 50.0]]}'
 
 def lambda_handler(event: Dict, _) -> Dict:
 
+    logger.info("Publishing dummy messages")
     # Publish sample message containing temperature data
     iot.publish(
         topic=os.getenv('TOPIC'),
@@ -36,6 +42,7 @@ def lambda_handler(event: Dict, _) -> Dict:
     )
 
     try:
+        logger.info("Testing GET request")
         # Test GET request
         query_string_params = f'?from={start}&to={end}'
         r = requests.get(os.getenv('API_URL') +
@@ -43,6 +50,7 @@ def lambda_handler(event: Dict, _) -> Dict:
 
         assert r.text == expected_response
 
+        logger.info("Testing POST request")
         # Test POST request
         payload = {
             'from': start,
@@ -53,13 +61,14 @@ def lambda_handler(event: Dict, _) -> Dict:
 
         assert r.text == expected_response
 
-        # TODO Clean Up (Delete elements from dynamodb)
+        # Clean up (delete elements from dynamodb)
         for m in measurements:
-            response = table.delete_item(
-                Key={
-                    'measurement': m,
-                    'timestamp': 10
-                })
+            response = table.delete_item(Key={
+                'measurement': m,
+                'timestamp': 10
+            })
+            logger.info(
+                f"Cleaning up successful. Removed dummy entries: {response}")
 
         return {
             'statusCode': 200,
@@ -67,9 +76,9 @@ def lambda_handler(event: Dict, _) -> Dict:
                 'message': 'Integration tests successful'})
         }
 
-    except AssertionError as e:
+    except Exception as e:
         return {
-            'statusCode': 200,
+            'statusCode': 400,
             'body': json.dumps({
                 'message': f'Integration tests failed: {e}'})
         }
