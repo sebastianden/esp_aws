@@ -4,17 +4,13 @@ env:
   shell: bash
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 12.x
-
   pre_build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - npm ci
       - npm run build
-      - cdk --version
       - npm install aws-cdk -g
+      - cdk --version
       - npm run test
 
   build:
