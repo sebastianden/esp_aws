@@ -1,9 +1,11 @@
 version: 0.2
 
+env:
+  shell: bash
+
 phases:
   pre_build:
     commands:
-      - pip install --python-version 38 --only-binary=":all:" --target ./test/lambda/layer/python/lib/python3.8/site-packages requests
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - npm ci
       - npm run build
@@ -13,4 +15,5 @@ phases:
   build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
+      - pip install --python-version 38 --only-binary=":all:" --target ./test/lambda/layer/python/lib/python3.8/site-packages requests
       - cdk deploy --all
