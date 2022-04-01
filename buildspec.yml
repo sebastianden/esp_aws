@@ -4,6 +4,10 @@ env:
   shell: bash
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 12.x
+
   pre_build:
     commands:
       - cd ${CODEBUILD_SRC_DIR}/cdk
