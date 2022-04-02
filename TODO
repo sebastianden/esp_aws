@@ -1,3 +1,3 @@
-- Checkout behave framework for python lambda
+- Better response formatting for lambda
 - Make publish topic more generic (publish to multiple topics depending on measurement and location?)
 - make new sensor with battery

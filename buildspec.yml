@@ -11,6 +11,8 @@ phases:
       - cdk --version
       - echo Running cdk unit tests
       - npm run test
+      - echo Install behave
+      - pip install behave
 
   build:
     commands:
@@ -22,8 +24,9 @@ phases:
 
   post_build:
     commands:
-      - echo Running integration tests
-      - python ${CODEBUILD_SRC_DIR}/test/integration_test.py
+      - echo Running BDD tests
+      - cd ${CODEBUILD_SRC_DIR}/features
+      - behave
       - echo Update API URL in iot.html and upload
       - API_URL=$(aws cloudformation list-exports --query "Exports[?Name=='iot-api-url'].Value" --no-paginate --output text)
       - sed -i "s%<API_URL>%$API_URL%g" ${CODEBUILD_SRC_DIR}/site/iot.html
