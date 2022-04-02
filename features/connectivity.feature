@@ -7,7 +7,7 @@ Feature: Validating the connectivity of all application components
 
     Examples: Messages
       | message        | method | response |
-      | [{"measurement":"temperature","value":21,"timestamp":10,"uom":"°C"},{"measurement":"humidity","value":50,"timestamp":10,"uom":"%"}] | GET  | {"data": [[10, 21.0, 50.0]]} |
+      | [{"measurement":"temperature","value":21,"timestamp":10,"uom":"°C"},{"measurement":"humidity","value":50,"timestamp":10,"uom":"%"}] | GET  | {"data": [[1, 21.0, 50.0]]} |
       | [{"measurement":"temperature","value":21,"timestamp":10,"uom":"°C"},{"measurement":"humidity","value":50,"timestamp":10,"uom":"%"}] | GET  | {"data": [[10, 21.0, 50.0]]} |
       | {} | GET  | {"data": []} |
       | {} | POST | {"data": []} |
