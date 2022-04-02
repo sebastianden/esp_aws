@@ -1,7 +1,4 @@
-- Integration test -> Send message to IoT core and check if in DynamoDb table by querying API
-- Add requests lambda layer
-
+- Automatically insert new api url into js script and upload to s3
 - Checkout behave framework for python lambda
 - Make publish topic more generic (publish to multiple topics depending on measurement and location?)
-- Unit test for cdk
 - make new sensor with battery
