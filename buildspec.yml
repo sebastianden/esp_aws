@@ -24,10 +24,9 @@ phases:
     commands:
       - echo Running integration tests
       - python ${CODEBUILD_SRC_DIR}/test/integration_test.py
-      - sed -i  "s/<API_URL>//g" iot.html
       - echo Update API URL in iot.html and upload
       - API_URL=$(aws cloudformation list-exports --query "Exports[?Name=='iot-api-url'].Value" --no-paginate --output text)
-      - sed -i "s%<API_URL>%$API_URL%g" iot.html
+      - sed -i "s%<API_URL>%$API_URL%g" ${CODEBUILD_SRC_DIR}/site/iot.html
       - aws s3 cp ${CODEBUILD_SRC_DIR}/site/iot.html s3://sebastiandengler.de/iot.html
 
 
