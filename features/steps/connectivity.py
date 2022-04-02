@@ -5,10 +5,8 @@ import json
 
 @given('the MQTT messages {message} are sent to the IoT Core')
 def step_connect(context, message):
-    print(message)
     context.client = boto3.client('lambda')
     context.message = json.loads(message)
-    print(context.message)
 
 
 @when('querying the API with a {method} request')
@@ -25,6 +23,4 @@ def step_connect(context, method):
 
 @then('then the response is: {response}')
 def step_connect(context, response):
-    print(response)
-    print(context.body)
     assert context.body == response
