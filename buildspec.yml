@@ -3,15 +3,25 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Installing cdk dependencies
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - npm ci
       - npm run build
       - npm install aws-cdk -g
       - cdk --version
+      - echo Running cdk unit tests
       - npm run test
 
   build:
     commands:
+      - echo Downloading lambda layer dependencies
       - pip install --python-version 38 --only-binary=":all:" --target ${CODEBUILD_SRC_DIR}/test/lambda/layer/python/lib/python3.8/site-packages requests
+      - echo Deploy CDK stacks
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - cdk deploy --all
+
+  post_build:
+    commands:
+      - pip install -r test/requirements.txt
+      - python test/integration_test.py
+

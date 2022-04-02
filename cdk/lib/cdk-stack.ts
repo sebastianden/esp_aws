@@ -74,8 +74,8 @@ export class CdkStack extends cdk.Stack {
 
     const queryDynamoDbLambda = new lambda.Function(this, 'IoTQueryDynamoDbLambda', {
       runtime: lambda.Runtime.PYTHON_3_8,
-      handler: 'query_dynamodb.lambda_handler',
-      code: lambda.Code.fromAsset('../lambda/'),
+      handler: 'index.lambda_handler',
+      code: lambda.Code.fromAsset('../lambda/query-dynamodb/'),
       role: queryDynamodbLambdaRole,
       functionName: 'iot-query-dynamodb-lambda',
       environment: {
@@ -101,12 +101,12 @@ export class CdkStack extends cdk.Stack {
 
     const iotTableArn = new cdk.CfnOutput(this, 'IotTableArn', {
       value: iotTable.tableArn,
-      exportName: 'iot-table-arn',
+      exportName: 'iot-dynamodb-table-arn',
     });
 
     const iotTableName = new cdk.CfnOutput(this, 'IotTableName', {
       value: iotTable.tableName,
-      exportName: 'iot-table-name',
+      exportName: 'iot-dynamodb-table-name',
     });
   }
 }
