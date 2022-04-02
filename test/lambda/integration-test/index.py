@@ -4,6 +4,7 @@ import os
 import requests
 from typing import Dict
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -43,6 +44,8 @@ def lambda_handler(event: Dict, _) -> Dict:
                 iot.publish(topic=os.getenv('TOPIC'),
                             qos=1, payload=json.dumps(data))
             logger.info('Published dummy events')
+            # Wait a short time to allow the IoT rule to process the message
+            time.sleep(1)
 
         response = test_request(event['method'])
 
