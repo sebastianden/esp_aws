@@ -22,6 +22,5 @@ phases:
 
   post_build:
     commands:
-      - pip install -r ${CODEBUILD_SRC_DIR}/test/requirements.txt
       - python ${CODEBUILD_SRC_DIR}/test/integration_test.py
 
