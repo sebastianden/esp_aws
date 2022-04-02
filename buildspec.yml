@@ -22,5 +22,6 @@ phases:
 
   post_build:
     commands:
+      - echo Running integration tests
       - python ${CODEBUILD_SRC_DIR}/test/integration_test.py
 

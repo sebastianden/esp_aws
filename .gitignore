@@ -52,8 +52,8 @@ Mkfile.old
 dkms.conf
 
 # Certificates
-data/
-certs/
+esp/data/
+esp/certs/
 
 # Node modules
 cdk/node_modules/

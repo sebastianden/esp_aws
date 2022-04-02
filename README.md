@@ -113,8 +113,27 @@ The resources deployed in the AWS cloud will enable storing and retrieval of the
 
 ### 2.1 Deploy CloudFormation Stack
 
-Everything besides the IoT thing configuration and the website in the S3 bucket can be provisioned automatically by deploying the cloudformation template included in the repository. To deploy the stack run the following command in the [AWS CLI](https://aws.amazon.com/cli/):
+Everything besides the IoT thing configuration and the website in the S3 bucket can be provisioned automatically by deploying the cdk stack included in the repository. To deploy the stack run the following command:
 
 ```
-aws cloudformation deploy --stack-name iot-stack --template-file cloudformation.yml --capabilities CAPABILITY_NAMED_IAM
+cdk deploy --all
 ```
+
+Requirements:
+- AWS CLI
+- NodeJs
+- CDK CLI
+
+The application is set up automatically by AWS CodePipeline and AWS CodeBuild on commit to the master branch in GitHub.
+
+### 2.2 Integration Tests
+
+As part of the application deployment integration tests are executed to ensure connectivity and functionality. Dummy messages are sent to the iot core from a lambda function, which subsequenty queries the API gateway and compares the response with the expected value.
+
+<div align="center">
+	<img width=500 src="images/integration-test.png" alt="architecture">
+	<br>
+    Schematic of the integration test process.
+    <br>
+    <br>
+</div>
