@@ -55,7 +55,7 @@ def lambda_handler(event: Dict, _) -> Dict:
         if event['data']:
             for m in event['data']:
                 table.delete_item(
-                    Key={'measurement': m['measurement'], 'timestamp': m['timestamp']})
+                    Key={'device': device, 'timestamp': m['timestamp']})
             logger.info('Cleaning up successful. Removed dummy entries.')
     except Exception as e:
         logger.exception(f'Unknown error. Integration test failed. {e}')
