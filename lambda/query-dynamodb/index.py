@@ -5,7 +5,6 @@ from boto3.dynamodb.conditions import Key
 from typing import Dict, List
 from collections import defaultdict
 
-# TODO: Clean up rearranging logic, maybe just return dict? {timestamps: [...], temperature: [...], humidity: [...]}
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
@@ -56,9 +55,12 @@ def format_results(query_results: Dict) -> Dict[str, List]:
     data = defaultdict(list)
 
     for item in query_results['Items']:
+        print(item)
         for key, value in item.items():
             if key == 'timestamp':
                 data[key].append(int(value))
+            elif key == 'device':
+                data[key].append(value)
             else:
                 data[key].append(float(value))
 
@@ -82,7 +84,7 @@ def lambda_handler(event: Dict, _) -> Dict:
             },
         }
 
-    query_results = query_measurements(req['from'], req['to'])
+    query_results = query_measurements(req['from'], req['to'], req['device'])
     data = format_results(query_results)
 
     return {

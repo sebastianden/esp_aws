@@ -16,11 +16,13 @@ table = dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
 start = 0
 end = 100
+device = 'test'
 
-query_string_params = f'?from={start}&to={end}'
+query_string_params = f'?from={start}&to={end}&device={device}'
 payload = {
     'from': start,
-    'to': end
+    'to': end,
+    'device': device
 }
 
 
