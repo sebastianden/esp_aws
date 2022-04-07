@@ -16,7 +16,7 @@ export class CdkStack extends cdk.Stack {
 
     const iotTable = new dynamodb.Table(this, 'IotDynamoDbTable', {
       tableName: 'iot-dynamodb-table',
-      partitionKey: { name: 'measurement', type: dynamodb.AttributeType.STRING },
+      partitionKey: { name: 'device', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'timestamp', type: dynamodb.AttributeType.NUMBER },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
