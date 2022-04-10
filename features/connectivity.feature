@@ -8,6 +8,6 @@ Feature: Validating the connectivity of all application components
     Examples: Messages
       | message | method | response |
       | [{"device": "test","timestamp": 10,"temperature": 21,"humidity": 50}] | GET  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
-      | [{"device": "test","timestamp": 10,"temperature": 21,"humidity": 50}] | GET  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
+      | [{"device": "test","timestamp": 10,"temperature": 21,"humidity": 50}] | POST  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
       | [{}] | GET  | {"data": {}} |
       | [{}] | POST | {"data": {}} |
