@@ -1,7 +1,7 @@
 Feature: Validating the connectivity of all application components
 
   Scenario Outline: Sending a MQTT message results in the right API request response
-    Given the MQTT message <message> are sent to the IoT Core
+    Given the MQTT messages <message> are sent to the IoT Core
     When querying the API with a <method> request
     Then then the response is: <response>
 

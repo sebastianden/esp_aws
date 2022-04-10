@@ -38,7 +38,8 @@
 
          var data = `{
             "from": ${from},
-            "to": ${to}
+            "to": ${to},
+            "device": "nodemcu"
             }`;
 
          xhr.send(data)
@@ -60,15 +61,15 @@
          data.addColumn('number', 'Humidity');
 
          if (range != hours) {
-            myResponse = sendRequest(hours);
+            myResponse = sendRequest(hours).data;
             console.log(myResponse)
-            document.getElementById("p1").innerHTML = "Humidity: " + myResponse.data[myResponse.data.length - 1][2] + " %";
-            document.getElementById("p2").innerHTML = "Temperature: " + Math.round(myResponse.data[myResponse.data.length - 1][1]) + " °C";
+            document.getElementById("p1").innerHTML = "Humidity: " + myResponse.humidity[myResponse.humidity.length - 1] + " %";
+            document.getElementById("p2").innerHTML = "Temperature: " + Math.round(myResponse.temperature[myResponse.temperature.length - 1]) + " °C";
             range = hours;
          }
 
-         for (let i = 0; i < myResponse.data.length; i++) {
-            data.addRow([new Date(myResponse.data[i][0] * 1000), myResponse.data[i][1], myResponse.data[i][2]])
+         for (let i = 0; i < myResponse.timestamp.length; i++) {
+            data.addRow([new Date(myResponse.timestamp[i] * 1000), myResponse.temperature[i], myResponse.humidity[i]])
             //data.addRow([new Date(myResponse.timestamp[i]*1000), myResponse.temperature[i], myResponse.humidity[i]]);
          }
 

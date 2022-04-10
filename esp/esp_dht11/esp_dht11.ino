@@ -14,10 +14,10 @@
 #define DHTPIN D5
 
 // Set WiFi credentials
-const char* ssid = "<YOUR_WIFI_SSID>";
-const char* password = "<YOUR_WIFI_PASSWORD>";
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 // Set publish and subscribe topics
-const char* pub_topic = "<YOUR_PUBLISH_TOPIC>";
+const char* pub_topic = "YOUR_PUBLISH_TOPIC";
 
 // DHT11 temperature and humidity sensor
 DHT dht(DHTPIN, DHTTYPE); 
@@ -26,8 +26,8 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 
 // Set AWS Endpoint and Thing name
-const char* AWS_endpoint = "<YOUR_AWS_ENDPOINT>";
-const char* AWS_thing = "<YOUR_THING_NAME>";
+const char* AWS_endpoint = "YOUR_AWS_ENDPOINT";
+const char* AWS_thing = "YOUR_THING_NAME";
 
 // Callback triggered on recieving a message
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -117,8 +117,6 @@ void setup() {
   dht.begin();
   Serial.begin(9600);
   Serial.setDebugOutput(true);
-
-  long start_time = millis();
   
   // Initialize WiFi Connection
   setup_wifi();
@@ -128,16 +126,6 @@ void setup() {
   // Update the WiFi Client with the AWS certificates
   load_certificates(); 
 
-  // Get a time structure and extract year, month, day
-  unsigned long epochTime = timeClient.getEpochTime();
-  struct tm *ptm = gmtime ((time_t *)&epochTime); 
-  int monthDay = ptm->tm_mday;
-  int currentMonth = ptm->tm_mon+1;
-  int currentYear = ptm->tm_year+1900;
-  // Get time correctly formatted
-  String formattedDate = timeClient.getFormattedTime();
-  const char* timestamp = formattedDate.c_str();
-
   Serial.print("Attempting MQTT connection...");
   while (!client.connected()) {
     // Attempt to connect
@@ -145,29 +133,22 @@ void setup() {
       Serial.println("connected");
     }
   }
+  // Get a time structure and extract year, month, day
+  unsigned long epochTime = timeClient.getEpochTime();
   // Read sensor values
   float h = dht.readHumidity();
   float t = dht.readTemperature();
   Serial.println(t);
   Serial.println(h);
 
-  // Publish temperature
-  snprintf(msg, 100, "{\"measurement\":\"temperature\",\n\"value\":%f,\n\"timestamp\":%d,\n\"uom\":\"°C\"}", t, epochTime, timestamp);
+  // Publish message
+  snprintf(msg, 100, "{\"device\":\"nodemcu\",\n\"timestamp\":%d,\n\"temperature\":%f,\n\"humidity\":%f}", epochTime, t, h);
   client.publish(pub_topic, msg);
   Serial.print("Publish message: ");
   Serial.println(msg);
-
-  // Publish humidity
-  snprintf(msg, 100, "{\"measurement\":\"humidity\",\n\"value\":%f,\n\"timestamp\":%d,\n\"uom\":\"%%\"}", h, epochTime, timestamp);
-  client.publish(pub_topic, msg);
-  Serial.print("Publish message: ");
-  Serial.println(msg);
-
-  // Correct for time spent connecting and reading the sensor
-  long delta_t = millis() - start_time;
 
   // Sleep
-  ESP.deepSleep(30*60*1e6-int(delta_t*1e3));
+  ESP.deepSleep(30*60*1e6);
 
 }
 

@@ -3,7 +3,7 @@ import boto3
 import json
 
 
-@given('the MQTT message {message} are sent to the IoT Core')
+@given('the MQTT messages {message} are sent to the IoT Core')
 def step_connect(context, message):
     context.client = boto3.client('lambda')
     context.message = json.loads(message)
