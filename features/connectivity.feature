@@ -7,7 +7,7 @@ Feature: Validating the connectivity of all application components
 
     Examples: Messages
       | message | topic | method | response |
-      | [{"timestamp": 10,"temperature": 21,"humidity": 50}] | "iot/test/data" | GET  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
-      | [{"timestamp": 10,"temperature": 21,"humidity": 50}] | "iot/test/data" | POST  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
-      | [{}] | "iot/test/data" | GET  | {"data": {}} |
-      | [{}] | "iot/test/data" | POST | {"data": {}} |
+      | [{"timestamp": 10,"temperature": 21,"humidity": 50}] | iot/test/data | GET  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
+      | [{"timestamp": 10,"temperature": 21,"humidity": 50}] | iot/test/data | POST  | {"data": {"humidity": [50.0], "temperature": [21.0], "device": ["test"], "timestamp": [10]}} |
+      | [{}] | iot/test/data | GET  | {"data": {}} |
+      | [{}] | iot/test/data | POST | {"data": {}} |
