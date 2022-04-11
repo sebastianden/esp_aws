@@ -6,7 +6,7 @@ export class TestStack extends cdk.Stack {
 
   ACCOUNT = '274607345716';
   REGION = 'eu-central-1';
-  TOPIC = 'esp8266/pub';
+  TOPIC = 'iot/test/data';
   IOT_ENDPOINT = 'https://a2mddjle8tpgu2-ats.iot.eu-central-1.amazonaws.com';
 
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -60,7 +60,6 @@ export class TestStack extends cdk.Stack {
       layers: [integrationTestLambdaLayer],
       timeout: cdk.Duration.seconds(30),
       environment: {
-        'TOPIC': this.TOPIC,
         'API_URL': queryApiUrl,
         'LAMBDA_NAME': queryDynamoDbLambdaName,
         'DYNAMODB_TABLE': iotTableName,
