@@ -3,10 +3,11 @@ import boto3
 import json
 
 
-@given('the MQTT messages {message} are sent to the IoT Core')
-def step_connect(context, message):
+@given('the MQTT messages {message} are sent to the {topic}')
+def step_connect(context, message, topic):
     context.client = boto3.client('lambda')
     context.message = json.loads(message)
+    context.topic = topic
 
 
 @when('querying the API with a {method} request')
@@ -15,6 +16,7 @@ def step_connect(context, method):
         FunctionName='iot-integration-test-lambda',
         Payload=json.dumps({
             'data': context.message,
+            'topic': context.topic,
             'method': method
         }))
     response = json.loads(response["Payload"].read())

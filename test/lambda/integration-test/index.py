@@ -43,7 +43,7 @@ def lambda_handler(event: Dict, _) -> Dict:
     try:
         if event['data']:
             for data in event['data']:
-                iot.publish(topic=os.getenv('TOPIC'),
+                iot.publish(topic=event['topic'],
                             qos=1, payload=json.dumps(data))
             logger.info('Published dummy events')
             # Wait a short time to allow the IoT rule to process the message
