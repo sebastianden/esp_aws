@@ -9,7 +9,7 @@ export class CdkStack extends cdk.Stack {
 
   ACCOUNT = '274607345716';
   REGION = 'eu-central-1';
-  TOPIC = 'esp8266/pub';
+  TOPIC = 'iot/+/data';
 
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -67,7 +67,7 @@ export class CdkStack extends cdk.Stack {
             roleArn: iotRuleRole.roleArn,
           },
         }],
-        sql: `SELECT * FROM '${this.TOPIC}'`,
+        sql: `SELECT topic(2) as device, * FROM '${this.TOPIC}'`,
         ruleDisabled: false,
       },
     });

@@ -142,7 +142,7 @@ void setup() {
   Serial.println(h);
 
   // Publish message
-  snprintf(msg, 100, "{\"device\":\"nodemcu\",\n\"timestamp\":%d,\n\"temperature\":%f,\n\"humidity\":%f}", epochTime, t, h);
+  snprintf(msg, 100, "{\"timestamp\":%d,\n\"temperature\":%f,\n\"humidity\":%f}", epochTime, t, h);
   client.publish(pub_topic, msg);
   Serial.print("Publish message: ");
   Serial.println(msg);
