@@ -7,8 +7,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class CdkStack extends cdk.Stack {
 
-  ACCOUNT = '274607345716';
-  REGION = 'eu-central-1';
   TOPIC = 'iot/+/data';
 
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {

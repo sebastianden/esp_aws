@@ -17,128 +17,6 @@
       rel='stylesheet'>
    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
    <script src="https://www.gstatic.com/charts/loader.js"></script>
-   <script>
-      function sendRequest(hours) {
-         var url = "<API_URL>iot-query-dynamodb-lambda";
-
-         var xhr = new XMLHttpRequest();
-         xhr.open("POST", url, false);
-
-         xhr.setRequestHeader("Accept", "application/json");
-         xhr.setRequestHeader("Content-Type", "application/json");
-
-         xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-               console.log(xhr.status);
-            }
-         };
-
-         var to = parseInt(Date.now() / 1000);
-         var from = to - 3600 * hours;
-
-         var data = `{
-            "from": ${from},
-            "to": ${to},
-            "device": "nodemcu"
-            }`;
-
-         xhr.send(data)
-         return JSON.parse(xhr.response);
-      }
-
-      var range = null;
-      var myResponse = null;
-
-      google.charts.load('current', { packages: ['corechart', 'line'] });
-
-      window.addEventListener('resize', function () { drawBasic(range) });
-
-      function drawBasic(hours = 48) {
-
-         var data = new google.visualization.DataTable();
-         data.addColumn('datetime', 'Time');
-         data.addColumn('number', 'Temperature');
-         data.addColumn('number', 'Humidity');
-
-         if (range != hours) {
-            myResponse = sendRequest(hours).data;
-            console.log(myResponse)
-            document.getElementById("p1").innerHTML = "Humidity: " + myResponse.humidity[myResponse.humidity.length - 1] + " %";
-            document.getElementById("p2").innerHTML = "Temperature: " + Math.round(myResponse.temperature[myResponse.temperature.length - 1]) + " °C";
-            range = hours;
-         }
-
-         for (let i = 0; i < myResponse.timestamp.length; i++) {
-            data.addRow([new Date(myResponse.timestamp[i] * 1000), myResponse.temperature[i], myResponse.humidity[i]])
-            //data.addRow([new Date(myResponse.timestamp[i]*1000), myResponse.temperature[i], myResponse.humidity[i]]);
-         }
-
-         var options = {
-            backgroundColor: '#232323',
-            curveType: 'function',
-            colors: ['red', 'blue'],
-            width: window.innerWidth,
-            height: .45 * window.innerWidth,
-            textStyle: {
-               color: '#909090'
-            },
-            legend: {
-               textStyle: {
-                  color: '#909090'
-               }
-            },
-            series: {
-               0: { targetAxisIndex: 0 },
-               1: { targetAxisIndex: 1 }
-            },
-            hAxis: {
-               title: 'Time',
-               titleColor: '#909090',
-               color: '#909090',
-               textStyle: {
-                  color: '#909090'
-               }
-            },
-            vAxes: {
-               0: {
-                  title: 'Temperature in °C',
-                  titleColor: '#909090',
-                  color: '#909090',
-                  gridlines: {
-                     multiple: 5,
-                  },
-                  viewWindow: {
-                     min: 10,
-                     max: 30
-                  },
-                  textStyle: {
-                     color: '#909090'
-                  }
-               },
-               1: {
-                  title: 'Humidity in %',
-                  titleColor: '#909090',
-                  color: '#909090',
-                  gridlines: {
-                     multiple: 25,
-                  },
-                  viewWindow: {
-                     min: 0,
-                     max: 100
-                  },
-                  textStyle: {
-                     color: '#909090'
-                  }
-               }
-            }
-         };
-
-         var chart = new google.visualization.AreaChart(document.getElementById('point'));
-         chart.draw(data, options);
-      }
-
-      google.charts.setOnLoadCallback(drawBasic);
-   </script>
 </head>
 
 <body>
@@ -152,10 +30,10 @@
    </nav>
    <div class="graph-item" id="point"></div>
    <div class="graph-buttons">
-      <button type="button" onclick="drawBasic(12)">12h</button>
-      <button type="button" onclick="drawBasic(24)">1d</button>
-      <button type="button" onclick="drawBasic(48)">2d</button>
-      <button type="button" onclick="drawBasic(168)">7d</button>
+      <button type="button" onclick="sendRequest(12)">12h</button>
+      <button type="button" onclick="sendRequest(24)">1d</button>
+      <button type="button" onclick="sendRequest(48)">2d</button>
+      <button type="button" onclick="sendRequest(168)">7d</button>
    </div>
    </div>
    <div class="services" style="padding: 0px;">
@@ -206,6 +84,7 @@
    <script src="js/vendor/bootstrap.min.js"></script>
    <script src="js/plugins.js"></script>
    <script src="js/main.js"></script>
+   <script src="js/iot.js"></script>
 </body>
 
 </html>

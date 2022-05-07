@@ -29,7 +29,8 @@ phases:
       - behave
       - echo Update API URL in iot.html and upload
       - API_URL=$(aws cloudformation list-exports --query "Exports[?Name=='iot-api-url'].Value" --no-paginate --output text)
-      - sed -i "s%<API_URL>%$API_URL%g" ${CODEBUILD_SRC_DIR}/site/iot.html
+      - sed -i "s%<API_URL>%$API_URL%g" ${CODEBUILD_SRC_DIR}/site/js/iot.js
       - aws s3 cp ${CODEBUILD_SRC_DIR}/site/iot.html s3://sebastiandengler.de/iot.html
+      - aws s3 cp ${CODEBUILD_SRC_DIR}/site/js/iot.js s3://sebastiandengler.de/js/iot.js
 
 

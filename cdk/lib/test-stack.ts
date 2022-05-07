@@ -4,8 +4,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class TestStack extends cdk.Stack {
 
-  ACCOUNT = '274607345716';
-  REGION = 'eu-central-1';
   TOPIC = 'iot/test/data';
   IOT_ENDPOINT = 'https://a2mddjle8tpgu2-ats.iot.eu-central-1.amazonaws.com';
 
@@ -29,7 +27,7 @@ export class TestStack extends cdk.Stack {
         IoTCorePublish: new iam.PolicyDocument({
           statements: [
             new iam.PolicyStatement({
-              resources: [`arn:aws:iot:${this.REGION}:${this.ACCOUNT}:topic/${this.TOPIC}`],
+              resources: [`arn:aws:iot:${props?.env?.region}:${props?.env?.account}:topic/${this.TOPIC}`],
               actions: ['iot:Publish'],
             }),
           ],

@@ -57,6 +57,3 @@ esp/certs/
 
 # Node modules
 cdk/node_modules/
-
-# Python packages
-test/lambda/layer/
