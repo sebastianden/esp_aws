@@ -54,6 +54,7 @@ dkms.conf
 # Certificates
 esp/data/
 esp/certs/
+esp/esp_dht11/secrets.h
 
 # Node modules
 cdk/node_modules/
