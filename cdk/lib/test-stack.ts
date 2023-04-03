@@ -44,10 +44,10 @@ export class TestStack extends cdk.Stack {
     });
 
     const integrationTestLambdaLayer = new lambda.LayerVersion(this, 'IotIntegrationTestLambdaLayer', {
-      code: lambda.Code.fromAsset('../test/lambda/layer/'),
+      code: lambda.Code.fromAsset('../test/lambda/layer/requests.2.28.2.zip'),
       compatibleRuntimes: [lambda.Runtime.PYTHON_3_8],
       layerVersionName: 'requests-layer',
-      description: 'requests-2.27.1'
+      description: 'requests-2.28.2'
     })
 
     const integrationTestLambda = new lambda.Function(this, 'IotIntegrationTestLambda', {
