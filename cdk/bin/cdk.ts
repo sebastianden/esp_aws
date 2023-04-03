@@ -8,14 +8,14 @@ const context = app.node.tryGetContext("env");
 
 new CdkStack(app, "CdkStack", {
   env: {
-    account: context.env.account,
-    region: context.env.region,
+    account: context.account,
+    region: context.region,
   },
 });
 
 new TestStack(app, "TestStack", {
   env: {
-    account: context.env.account,
-    region: context.env.region,
+    account: context.account,
+    region: context.region,
   },
 });
