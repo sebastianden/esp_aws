@@ -6,7 +6,6 @@ phases:
       - echo Installing cdk dependencies
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - npm ci
-      - npm run build
       - npm install aws-cdk -g
       - cdk --version
       - echo Running cdk unit tests
