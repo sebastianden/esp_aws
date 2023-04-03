@@ -5,6 +5,7 @@ phases:
     commands:
       - echo Installing cdk dependencies
       - cd ${CODEBUILD_SRC_DIR}/cdk
+      - npm i npm -g
       - npm ci
       - npm run build
       - npm install aws-cdk -g
@@ -31,5 +32,3 @@ phases:
       - aws s3 cp ${CODEBUILD_SRC_DIR}/site/iot.html s3://sebastiandengler.de/iot.html
       - aws s3 cp ${CODEBUILD_SRC_DIR}/site/js/iot.js s3://sebastiandengler.de/js/iot.js
       - echo SUCCESS
-
-
