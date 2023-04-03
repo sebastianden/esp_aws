@@ -18,7 +18,7 @@ phases:
       - echo Downloading lambda layer dependencies
       - pip install --python-version 38 --only-binary=":all:" --target ${CODEBUILD_SRC_DIR}/test/lambda/layer/python/lib/python3.8/site-packages requests
       - echo Remove all ".dist-info" to get reproducible layer hash
-      - find . -type d -name "*.dist-info"
+      - find ${CODEBUILD_SRC_DIR}/test/lambda/layer/python/lib/python3.8/site-packages -type d -name "*.dist-info"  -exec rm -r {} +
       - echo Deploy CDK stacks
       - cd ${CODEBUILD_SRC_DIR}/cdk
       - cdk deploy --all --require-approval never
